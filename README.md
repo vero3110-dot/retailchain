@@ -9,7 +9,7 @@ Contexto
 Sos analista de datos en RetailChain, una cadena de retail con dos sucursales. Cada sucursal gestiona su propio inventario en tablas separadas y te pidieron dos reportes distintos: uno para el área comercial que necesita el catálogo unificado de productos, y otro para el área de operaciones que necesita auditar el stock total físico de toda la cadena.
 
 ¿Cuántas filas devuelve cada consulta y por qué son distintas? Explicá con ejemplos concretos de los datos qué filas se eliminaron con UNION.
-La consulta union all trae 14 lineas ya que no elimina ninguna linea de las sucursales sumadas, la consulta union trae 11 lineas y eso se debe a que al contar los id_producto de ambas sucursales elimina los duplicados
+La consulta union all trae 14 lineas ya que no elimina ninguna linea de las sucursales sumadas, la consulta union trae 11 lineas y eso se debe a que al contar los id_producto de ambas sucursales elimina los duplicados (103,104,106)
 
 ¿Por qué UNION ALL es más eficiente que UNION? ¿Qué operación adicional realiza UNION internamente que consume más recursos?
 UNION ALL es mas eficiente que UNION porque solo combina las consultas, union debe primero identificar las filas duplicadas y por eso consume mas recursos.
