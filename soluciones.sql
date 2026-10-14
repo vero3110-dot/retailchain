@@ -1,43 +1,44 @@
 -- ══════════════════════════════════════════
--- RetailChain — UNION y UNION ALL
+-- MiniStore — Soluciones con Outer JOINs
 -- Autor: [Tu nombre]
 -- Fecha: [Fecha de entrega]
 -- ══════════════════════════════════════════
 
--- ── CONSULTA 1: UNION ────────────────────
--- Reporte de Catálogo Unificado
--- Pregunta de negocio: ¿Qué productos únicos comercializa
--- la empresa en toda su red de sucursales?
--- Operador: UNION (elimina filas completamente duplicadas)
+-- ── CONSULTA 1: LEFT JOIN ─────────────────
+-- Pregunta de negocio: ¿Qué productos del catálogo nunca fueron vendidos?
+-- Mostrá todos los productos y sus ventas asociadas.
+-- Los productos sin ventas aparecerán con NULL en las columnas de ventas.
 
 -- [Tu consulta aquí]
-SELECT ID_PRODUCTO FROM inventario_sucursal_norte
-UNION 
-SELECT ID_PRODUCTO FROM inventario_sucursal_sur
+select P.producto_id,V.CANTIDAD
+FROM PRODUCTOS P
+LEFT JOIN VENTAS V
+ON P.producto_id=V.producto_id
+where cantidad is null
 
--- ── CONSULTA 2: UNION ALL ────────────────
--- Auditoría de Stock Total
--- Pregunta de negocio: ¿Cuántos registros físicos de stock
--- existen en total entre ambas sucursales?
--- Operador: UNION ALL (mantiene todos los registros incluyendo duplicados)
+--respuesta: producto_id 108 y 109
+
+-- ── CONSULTA 2: RIGHT JOIN ────────────────
+-- Pregunta de negocio: ¿Existen ventas registradas con productos
+-- que no figuran en nuestro catálogo? (posible error de carga de datos)
+-- Los registros huérfanos aparecerán con NULL en las columnas de productos.
 
 -- [Tu consulta aquí]
+select P.producto_id,P.nombre,V.CANTIDAD
+FROM PRODUCTOS P
+RIGHT JOIN VENTAS V
+ON P.producto_id=V.producto_id
+where p.producto_id is null
+-- si, hay una linea con carga incompleta
 
-SELECT *,'NORTE'AS TIPO FROM inventario_sucursal_norte
-UNION ALL
-SELECT *, 'SUR' FROM inventario_sucursal_sur
+-- ── CONSULTA 3: FULL OUTER JOIN ───────────
+-- Pregunta de negocio: Vista completa de auditoría que muestre
+-- todos los productos y todas las ventas sin perder ninguna fila,
+-- identificando tanto productos sin ventas como ventas sin producto.
 
--- ── CONSULTA 3: COMPARACIÓN DE RESULTADOS ─
--- Ejecutá estas dos consultas para comparar cuántas filas
--- devuelve cada operador y explicá la diferencia en tu README
+-- [Tu consulta aquí]
+select P.producto_id,P.nombre,V.CANTIDAD
+FROM PRODUCTOS P
+full outer JOIN VENTAS V
+ON P.producto_id=V.producto_id
 
-SELECT COUNT(*) AS filas_unioN  FROM (SELECT ID_PRODUCTO FROM inventario_sucursal_norte
-UNION 
-SELECT ID_PRODUCTO FROM inventario_sucursal_sur     )AS resultado_union;
---RESULTADO 11- ELIMINA LAS FILAS CON ID_PRODUCTO DUPLICADO
-
-SELECT COUNT(*) AS filas_union_all
-FROM (SELECT *,'NORTE' AS TIPO FROM inventario_sucursal_norte
-UNION ALL
-SELECT *, 'SUR' FROM inventario_sucursal_sur) AS resultado_union_all;
---RESULTADO 14- TRAE TODAS LAS FILAS DE AMBAS CONSULTAS
